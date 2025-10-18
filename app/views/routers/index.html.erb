@@ -1,0 +1,34 @@
+<!-- app/views/routers/index.html.erb -->
+<div class="router-dashboard">
+  <div class="stats-cards">
+    <div class="card online">
+      <h3><%= @online_count %></h3>
+      <p>Online Routers</p>
+    </div>
+    <div class="card offline">
+      <h3><%= @offline_count %></h3>
+      <p>Offline Routers</p>
+    </div>
+  </div>
+
+  <div class="routers-grid">
+    <% @routers.each do |router| %>
+      <div class="router-card <%= router.active? ? 'online' : 'offline' %>">
+        <h4><%= link_to router.name, router %></h4>
+        <p><strong>Location:</strong> <%= router.location %></p>
+        <p><strong>DDNS:</strong> <%= router.ddns_hostname %></p>
+        <p><strong>Current IP:</strong> <%= router.current_ip || 'Unknown' %></p>
+        <p><strong>Last Seen:</strong> <%= time_ago_in_words(router.last_seen_at) if router.last_seen_at %></p>
+        
+        <div class="actions">
+          <%= link_to 'View', router, class: 'btn btn-primary' %>
+          <%= link_to 'Edit', edit_router_path(router), class: 'btn btn-secondary' %>
+          <%= button_to 'Check Status', check_status_router_path(router), 
+                        method: :patch, remote: true, class: 'btn btn-info' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <%= link_to 'Add New Router', new_router_path, class: 'btn btn-success' %>
+</div>

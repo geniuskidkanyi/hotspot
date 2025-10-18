@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  name: MyString
+  ddns_hostname: MyString
+  api_username: MyString
+  api_password: MyString
+  last_seen_at: 2025-10-18 00:17:34
+
+two:
+  user: two
+  name: MyString
+  ddns_hostname: MyString
+  api_username: MyString
+  api_password: MyString
+  last_seen_at: 2025-10-18 00:17:34
