@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        RUBY_VERSION: 3.3.0
+    image: geniuskidkanyi/hotspot:latest
+    container_name: hotspot-web
+    ports:
+      - "3000:80"  # Thruster serves on port 80 inside container
+    environment:
+      RAILS_ENV: production
+      RAILS_LOG_LEVEL: info
+      RAILS_SERVE_STATIC_FILES: 'true'
+      SOLID_QUEUE_IN_PUMA: 'true'
+      JOB_CONCURRENCY: 3
+      WEB_CONCURRENCY: 2
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      DATABASE_URL: ${DATABASE_URL}
+      CACHE_DATABASE_URL: ${CACHE_DATABASE_URL}
+      QUEUE_DATABASE_URL: ${QUEUE_DATABASE_URL}
+      CABLE_DATABASE_URL: ${CABLE_DATABASE_URL}
+    volumes:
+      - hotspot_storage:/rails/storage
+      - hotspot_logs:/rails/log
+    networks:
+      - keila_default  # Connect to existing PostgreSQL network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/up"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  hotspot_storage:
+    name: hotspot_storage
+  hotspot_logs:
+    name: hotspot_logs
+
+networks:
+  keila_default:
+    external: true  # Use existing network where PostgreSQL container is
