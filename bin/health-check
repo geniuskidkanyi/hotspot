@@ -1,0 +1,82 @@
+#!/bin/bash
+
+SERVER="65.21.247.104"
+SERVER_USER="deploy"
+
+echo "🏥 Hotspot Health Check (65.21.247.104)"
+echo "========================================"
+
+# Check if we can SSH to server
+echo -n "SSH Connection: "
+if ssh -o ConnectTimeout=5 ${SERVER_USER}@${SERVER} 'exit' 2>/dev/null; then
+    echo "✅ Connected"
+else
+    echo "❌ Failed"
+    exit 1
+fi
+
+# Check if containers are running
+echo -n "Docker Containers: "
+CONTAINER_COUNT=$(ssh ${SERVER_USER}@${SERVER} 'cd /home/deploy/hotspot && docker compose ps -q | wc -l' 2>/dev/null)
+if [ "$CONTAINER_COUNT" -gt 0 ]; then
+    echo "✅ Running ($CONTAINER_COUNT containers)"
+else
+    echo "❌ Not Running"
+fi
+
+# Check application health endpoint
+echo -n "Application Health: "
+HEALTH=$(curl -s -o /dev/null -w "%{http_code}" https://app.root.gm/up 2>/dev/null)
+if [ "$HEALTH" == "200" ]; then
+    echo "✅ Healthy (HTTP $HEALTH)"
+else
+    echo "❌ Unhealthy (HTTP $HEALTH)"
+fi
+
+# Check database connectivity
+echo -n "Database Connection: "
+DB_CHECK=$(ssh ${SERVER_USER}@${SERVER} 'docker compose exec -T web bin/rails runner "ActiveRecord::Base.connection.execute(\"SELECT 1\")" 2>&1')
+if [ $? -eq 0 ]; then
+    echo "✅ Connected"
+else
+    echo "❌ Failed"
+fi
+
+# Check all Solid databases
+echo -n "Cache DB: "
+CACHE_CHECK=$(ssh ${SERVER_USER}@${SERVER} 'docker compose exec -T web bin/rails runner "Rails.cache.write(\"health\", \"ok\"); puts Rails.cache.read(\"health\")" 2>&1' | grep -q "ok")
+if [ $? -eq 0 ]; then
+    echo "✅ Working"
+else
+    echo "⚠️  Check manually"
+fi
+
+echo -n "Queue DB: "
+QUEUE_CHECK=$(ssh ${SERVER_USER}@${SERVER} 'docker compose exec -T web bin/rails runner "puts SolidQueue::Process.count" 2>&1')
+if [ $? -eq 0 ]; then
+    echo "✅ Connected ($QUEUE_CHECK processes)"
+else
+    echo "❌ Failed"
+fi
+
+# Check disk usage
+echo -n "Disk Usage: "
+DISK=$(ssh ${SERVER_USER}@${SERVER} 'df -h /home/deploy | tail -1 | awk "{print \$5}"' 2>/dev/null)
+echo "$DISK"
+
+# Check memory usage
+echo -n "Memory Usage: "
+MEMORY=$(ssh ${SERVER_USER}@${SERVER} 'free -h | grep Mem | awk "{print \$3\"/\"\$2}"' 2>/dev/null)
+echo "$MEMORY"
+
+# Check container logs for errors (last 100 lines)
+echo -n "Recent Errors: "
+ERROR_COUNT=$(ssh ${SERVER_USER}@${SERVER} 'docker compose logs --tail=100 web 2>&1 | grep -i error | wc -l' 2>/dev/null)
+echo "$ERROR_COUNT"
+
+# Check uptime
+echo -n "Server Uptime: "
+UPTIME=$(ssh ${SERVER_USER}@${SERVER} 'uptime -p' 2>/dev/null)
+echo "$UPTIME"
+
+echo "========================================"
