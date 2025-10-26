@@ -15,6 +15,7 @@ services:
       RAILS_LOG_LEVEL: info
       RAILS_SERVE_STATIC_FILES: 'true'
       SOLID_QUEUE_IN_PUMA: 'true'
+      RAILS_MASTER_KEY: 'd559ce4169c2d882573c7fbb27e5cffe'
       JOB_CONCURRENCY: 3
       WEB_CONCURRENCY: 2
     volumes:
