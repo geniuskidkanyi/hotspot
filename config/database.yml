@@ -82,8 +82,8 @@ production:
   primary: &primary_production
     <<: *default
     database: hotspot_production
-    username: hotspot
-    password: <%= ENV["HOTSPOT_DATABASE_PASSWORD"] %>
+    username: keila_user2
+    password: keila_f5f9be423b0d
   cache:
     <<: *primary_production
     database: hotspot_production_cache
