@@ -8,8 +8,7 @@ image: geniuskidkanyi/hotspot
 servers:
   web:
     hosts:
-      - 65.21.247.104
-    proxy: false
+      - 95.217.15.218
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -35,10 +34,13 @@ registry:
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 env:
+  clear:
+    DB_HOST: hotspot-postgres
+    POSTGRES_USER: hostspot
+    POSTGRES_DB: hostspot_production
   secret:
     - RAILS_MASTER_KEY
-    - DATABASE_USERNAME
-    - DATABASE_PASSWORD
+    - POSTGRES_PASSWORD
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
@@ -96,25 +98,14 @@ builder:
 #   user: app
 
 # Use accessory services (secrets come from .kamal/secrets).
-# accessories:
-#   db:
-#     image: mysql:8.0
-#     host: 192.168.0.2
-#     # Change to 3306 to expose port to the world instead of just local network.
-#     port: "127.0.0.1:3306:3306"
-#     env:
-#       clear:
-#         MYSQL_ROOT_HOST: '%'
-#       secret:
-#         - MYSQL_ROOT_PASSWORD
-#     files:
-#       - config/mysql/production.cnf:/etc/mysql/my.cnf
-#       - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
-#     directories:
-#       - data:/var/lib/mysql
-#   redis:
-#     image: redis:7.0
-#     host: 192.168.0.2
-#     port: 6379
-#     directories:
-#       - data:/data
+postgres:
+    image: postgres:15
+    host: 95.217.15.218 # The IP you want the database deployed to
+    env:
+      clear:
+        POSTGRES_USER: hostspot # Same as above
+        POSTGRES_DB: hostspot_production # Same as above
+      secret:
+        - POSTGRES_PASSWORD # Comes from the .kamal/secrets file
+    directories:
+      - data:/var/lib/postgresql/data

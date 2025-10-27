@@ -81,11 +81,11 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: hotspot_production
-    username: keila_user2
-    password: keila_f5f9be423b0d
-    host: 172.19.0.2
-    port: 5432
+    username: <%= ENV["POSTGRES_USER"] %>
+    database: <%= ENV["POSTGRES_DB"] %>
+    password: <%= ENV["POSTGRES_PASSWORD"] %>
+    host: <%= ENV["DB_HOST"] %>
+    port: <%= ENV["DB_PORT"] %>
 
   cache:
     <<: *primary_production
