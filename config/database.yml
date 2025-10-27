@@ -82,11 +82,11 @@ production:
   primary: &primary_production
     <<: *default
     database: hotspot_production
-    username: <%= ENV.fetch("POSTGRES_USER") { "keila_user2" } %>
-    password: <%= ENV.fetch("POSTGRES_PASSWORD") { "keila_f5f9be423b0d" } %>
-    host: <%= ENV.fetch("POSTGRES_HOST") { "172.19.0.2" } %>
-    port: <%= ENV.fetch("POSTGRES_PORT") { 5432 } %>
-  
+    username: keila_user2
+    password: keila_f5f9be423b0d
+    host: 172.19.0.2
+    port: 5432
+
   cache:
     <<: *primary_production
     database: hotspot_production_cache
