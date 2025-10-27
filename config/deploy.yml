@@ -38,6 +38,7 @@ env:
     DB_HOST: hotspot-postgres
     POSTGRES_USER: hostspot
     POSTGRES_DB: hostspot_production
+    DB_HOST: hotspot-postgres
   secret:
     - RAILS_MASTER_KEY
     - POSTGRES_PASSWORD
