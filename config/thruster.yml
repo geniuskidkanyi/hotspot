@@ -1,0 +1,64 @@
+# Thruster configuration for Rails application
+# Thruster is a zero-config HTTP/2 proxy with automatic SSL
+
+default: &default
+  # The port Thruster will listen on for HTTPS traffic
+  port: 443
+  
+  # The port Thruster will listen on for HTTP traffic (for redirects)
+  http_port: 80
+  
+  # The upstream Rails server to proxy to
+  target: http://127.0.0.1:3000
+  
+  # Cache configuration
+  cache:
+    size: 64m
+    max_item_size: 1m
+  
+  # X-Sendfile support for efficient file serving
+  x_sendfile: true
+  
+  # Enable HTTP/2
+  http2: true
+  
+  # Enable gzip/brotli compression
+  compression: true
+  
+  # Access log path
+  log:
+    access: log/thruster_access.log
+    error: log/thruster_error.log
+
+development:
+  <<: *default
+  port: 3443
+  http_port: 3080
+  # Don't require SSL in development
+  ssl: false
+
+test:
+  <<: *default
+  port: 4443
+  http_port: 4080
+  ssl: false
+
+production:
+  <<: *default
+  # SSL certificates (auto-generated via Let's Encrypt)
+  ssl:
+    domain: app.root.gm
+    email: kanyi@root.gm
+  
+  # Storage for cache and certificates
+  storage:
+    cache: tmp/thruster/cache
+    certificates: tmp/thruster/certificates
+  
+  # Security headers
+  headers:
+    Strict-Transport-Security: "max-age=31536000; includeSubDomains; preload"
+    X-Frame-Options: "SAMEORIGIN"
+    X-Content-Type-Options: "nosniff"
+    X-XSS-Protection: "1; mode=block"
+    Referrer-Policy: "strict-origin-when-cross-origin"
