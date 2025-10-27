@@ -9,7 +9,7 @@ services:
     image: geniuskidkanyi/hotspot:latest
     container_name: hotspot-web
     ports:
-      - "3000:80"  # Thruster serves on port 80 inside container
+      - "3000:3000"  # Thruster serves on port 80 inside container
     env_file:
       - .env
     environment:
