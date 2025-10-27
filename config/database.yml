@@ -86,7 +86,7 @@ production:
     password: keila_f5f9be423b0d
     host: 172.19.0.2
     port: 5432
-    url: Rails.application.credentials.dig(:DATABASE_URL)
+    url: postgresql://keila_user2:keila_f5f9be423b0d@172.19.0.2:5432/hotspot_production
 
   cache:
     <<: *primary_production
