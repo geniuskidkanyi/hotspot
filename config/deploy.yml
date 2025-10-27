@@ -98,14 +98,15 @@ builder:
 #   user: app
 
 # Use accessory services (secrets come from .kamal/secrets).
-postgres:
-    image: postgres:15
-    host: 95.217.15.218 # The IP you want the database deployed to
-    env:
-      clear:
-        POSTGRES_USER: hostspot # Same as above
-        POSTGRES_DB: hostspot_production # Same as above
-      secret:
-        - POSTGRES_PASSWORD # Comes from the .kamal/secrets file
-    directories:
-      - data:/var/lib/postgresql/data
+accessories:
+  postgres:
+      image: postgres:15
+      host: 95.217.15.218 # The IP you want the database deployed to
+      env:
+        clear:
+          POSTGRES_USER: hostspot # Same as above
+          POSTGRES_DB: hostspot_production # Same as above
+        secret:
+          - POSTGRES_PASSWORD # Comes from the .kamal/secrets file
+      directories:
+        - data:/var/lib/postgresql/data
