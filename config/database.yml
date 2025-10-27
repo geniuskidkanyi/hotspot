@@ -81,7 +81,9 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    url: <%= ENV['DATABASE_URL'] %>
+    database: hotspot_production
+    username: keila_user2
+    password: keila_f5f9be423b0d
 
   cache:
     <<: *primary_production
