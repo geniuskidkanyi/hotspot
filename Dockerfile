@@ -23,7 +23,8 @@ RUN apt-get update -qq && \
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+    BUNDLE_WITHOUT="development" \
+    DATABASE_URL=postgresql://keila_user2:keila_f5f9be423b0d@172.19.0.2:5432/hotspot_production
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
