@@ -83,7 +83,7 @@ production:
     <<: *default
     database: hotspot_production
     username: deploy
-    password: keila_f5f9be423b0d
+    password: Rh2PBg1mcnC9
   cache:
     <<: *primary_production
     database: hotspot_production_cache
