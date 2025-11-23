@@ -33,21 +33,28 @@
 
   <body>
     <div class="h-full">
-      <%= render "layouts/header" %>
-
-      <main class="-mt-32">
-        <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-          <div
-            class="
-              rounded-lg bg-white px-5 py-6 shadow sm:px-6 dark:bg-gray-100
-              dark:shadow-none dark:outline dark:outline-1
-              dark:-outline-offset-1 dark:outline-white/10
-            "
-          >
-            <%= yield %>
+      <% if user_signed_in? %>
+        <%= render "layouts/header" %>
+        <main class="-mt-32">
+          <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+            <div
+              class="
+                rounded-lg px-5 py-6 shadow sm:px-6 bg-gray-50
+                dark:shadow-none dark:outline dark:outline-1
+                dark:-outline-offset-1 dark:outline-white/10
+              "
+            >
+              <%= yield %>
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+      <% else %>
+      <%= render "layouts/header_non_log" %>
+      <main class="min-h-screen">
+        <%= yield %>
+        </main>
+      <% end %>
+
     </div>
   </body>
 </html>

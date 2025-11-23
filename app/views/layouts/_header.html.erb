@@ -197,16 +197,11 @@
                   Settings
                 </a>
 
-                <a
-                  href="#"
-                  class="
+                <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },  class: "
                     block px-4 py-2 text-sm text-gray-700
                     focus:bg-gray-100 focus:outline-none
                     dark:text-gray-200 dark:focus:bg-white/5
-                  "
-                >
-                  Sign out
-                </a>
+                  " %>
               </el-menu>
             </el-dropdown>
           </div>
@@ -344,15 +339,10 @@
             Settings
           </a>
 
-          <a
-            href="#"
-            class="
+          <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },  class: "
               block rounded-md px-3 py-2 text-base font-medium text-white
               hover:bg-indigo-500/75 dark:hover:bg-indigo-700/75
-            "
-          >
-            Sign out
-          </a>
+            " %>
         </div>
       </div>
     </el-disclosure>
